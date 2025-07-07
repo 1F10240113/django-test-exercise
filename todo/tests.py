@@ -108,11 +108,11 @@ class TodoViewTestCase(TestCase):
         response = client.get('/{}/'.format(task.pk))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.templaes[0].name, 'toso/detail.html')
+        self.assertEqual(response.templates[0].name, 'toso/detail.html')
         self.assertEqual(response.context['task'], task)
 
     def test_detail_get_fail(self):
         client = Client()
         response = client.get('/1/')
 
-        self.assetEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
