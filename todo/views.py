@@ -22,7 +22,7 @@ def index(request):
     }
     return render(request, 'todo/index.html', context)
 
-def detail(request,task_id):
+def detail(request, task_id):
     try:
         task = Task.objects.get(pk=task_id)
     except Task.DoesNotExist:
@@ -33,17 +33,30 @@ def detail(request,task_id):
     }
     return render(request, 'todo/detail.html', context)
 
-def update (request, task_id):
+# あなたが追加した更新機能
+def update(request, task_id):
     try:
         task = Task.objects.get(pk=task_id)
     except Task.DoesNotExist:
         raise Http404("Task does not exist")
+    
     if request.method == 'POST':
         task.title = request.POST['title']
-        task.due_at = make_aware (parse_datetime(request.POST['due_at']))
+        task.due_at = make_aware(parse_datetime(request.POST['due_at']))
         task.save()
-        return redirect (detail, task_id)
+        return redirect(detail, task_id)
+    
     context = {
         'task': task
     }
-    return render (request, "todo/edit.html", context)
+    return render(request, "todo/edit.html", context)
+
+# mainブランチから来た削除機能
+def delete(request, task_id):
+    try:
+        task = Task.objects.get(pk=task_id)
+    except Task.DoesNotExist:
+        raise Http404("Task does not exist")
+    
+    task.delete()
+    return redirect(index)
